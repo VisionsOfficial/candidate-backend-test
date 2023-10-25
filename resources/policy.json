@@ -1,0 +1,26 @@
+{
+	"@context": "https://www.w3.org/ns/odrl.jsonld",
+	"@type": "Offer",
+	"permission": {
+		"action": "use",
+		"target": "http://provider/service",
+		"constraint": [
+			{
+				"leftOperand": "dateTime",
+				"operator": "lt",
+				"rightOperand": {
+					"@value": "2023-12-31T23:59:59Z",
+					"@type": "xsd:dateTime"
+				}
+			},
+			{
+				"leftOperand": "dateTime",
+				"operator": "gt",
+				"rightOperand": {
+					"@value": "2023-01-01T00:00:00Z",
+					"@type": "xsd:dateTime"
+				}
+			}
+		]
+	}
+}
