@@ -23,22 +23,24 @@ cp .env.sample .env
 ## Basic CRUD REST API for a contractualisation service
 
 **Objective:**
-Evaluate the candidate's skills in designing and implementing a REST API using TypeScript, Express, and MongoDB, with a specific focus on contractualization for data exchanges.
+Evaluate the candidate's skills in designing and implementing a REST API using TypeScript, Express, and MongoDB using mongoose, with a specific focus on contractualization for data exchanges.
 
 **Test Description:**
 The candidate will be responsible for developing a basic REST API for a contractualization service, implementing CRUD operations. The contract model includes the following fields:
 
-- Data Provider : participant providing the target resource
-- Data Consumer : participant consuming the target resource
+- Data Provider : a string representing the ID of the participant providing the target resource
+- Data Consumer : a string representing the ID of the participant consuming the target resource
 - Data Provider Signature : Signature from the data provider. For the test, this can be a boolean.
 - Data Consumer Signature : Signature from the data consumer. For the test, this can be a boolean.
 - Terms and Conditions (using the ODRL model) : policy[] -> [example policy](./resources/policy.json)
-- Target (URI of a resource pointing to a dataset) : string -> ex: http://company.com/dataset/1
+- Target (URI of a resource pointing to a dataset) : string -> ex: `http://company.com/dataset/1`
 - Status : "pending" | "signed" | "revoked"
-- Creation timestamp : Datetime
-- Update timestamp : Datetime
+- Creation timestamp : Date
+- Update timestamp : Date
 
-The candidate is also required to create a MongoDB schema to represent these contracts.
+For the test, you can simply use generic strings for the data provider/consumer (ex: "participantA"/"participantB"). If you chose to implement the bonus tasks, we ask that you set the proper participant IDs instead.
+
+The candidate is also required to create a mongoose schema to represent these contracts.
 
 **Tasks:**
 
@@ -57,8 +59,8 @@ The candidate is also required to create a MongoDB schema to represent these con
 - PUT to sign a contract. You have the choice of how you wish to implement the logic of verification of with participant is making the request.
 - DELETE to revoke a contract
 
-**BONUS endpoints to implement**
-- Extension to GET all contracts to be able to filter by participant / status / timestamp
+**BONUS tasks -recommended-**
+- Extension to the GET all contracts endpoints to be able to query filter by participant / status / timestamp
 - Addition of basic authentication using JWT for participants -> to put in place at least for the PUT endpoint for signing
 - Add middleware for payload validation
 - Add swagger documentation for the API 
@@ -68,9 +70,13 @@ The candidate must provide well-structured code, follow best development practic
 **Candidate Instructions:**
 
 1. Clone the provided Git repository.
-2. Create a branch for development.
+2. Create a branch for development with the following format "FIRST_NAME-candidate".
 3. Implement the requested features.
 4. Provide documentation on how to run the application locally in a INSTRUCTIONS.md file at the root of the project.
 5. Submit a pull request once the test is completed.
+
+Please note that some details were not included on purpose to test your capacity to think for yourselves on some tasks.
+
+If you're having trouble and are completely stuck, contact felix@visionspol.eu.
 
 Good luck!
