@@ -1,12 +1,28 @@
-import express from 'express';
+import express, { Application } from "express";
+import morgan from "morgan";
+import Router from "./routes";
+import swaggerUi from "swagger-ui-express";
 
-const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.get('/ping', async (req, res, next) => {
-    res.status(200).send('pong');
-});
+const app: Application = express();
+
+app.use(express.json());
+app.use(morgan("tiny"));
+app.use(express.static("public"));
+
+app.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(undefined, {
+        swaggerOptions: {
+            url: "/swagger.json",
+        },
+    })
+);
+
+app.use(Router);
 
 app.listen(PORT, () => {
-    console.log(`App running on http://localhost:${PORT}`);
+    console.log("Server is running on port", PORT);
 });
