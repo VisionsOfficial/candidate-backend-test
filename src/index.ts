@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import morgan from "morgan";
 import Router from "./routes";
 import swaggerUi from "swagger-ui-express";
+import * as mongoose from 'mongoose';
 
 const PORT = process.env.PORT || 3000;
 
@@ -22,6 +23,13 @@ app.use(
 );
 
 app.use(Router);
+
+mongoose.connect(`mongodb://localhost:27017/visions`, {
+}).then(
+    r => console.log("Connected"),
+    error => console.log("Failed to connect", error)
+);
+
 
 app.listen(PORT, () => {
     console.log("Server is running on port", PORT);
