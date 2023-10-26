@@ -1,9 +1,9 @@
-import { Body, Delete, Example, Get, Post, Put, Queries, Path, Route, Tags } from 'tsoa';
-import { getAllContractValidations } from '../validations/contracts.validations';
+import { Body, Post, Route, Tags } from 'tsoa';
 import logger from '../logger';
 import { IUserCreate, User } from '../models/users';
 import { loginResponse, newUserResponse } from '../responses/user.responses';
-import { createHash, randomBytes, createHmac, BinaryLike, KeyObject } from 'crypto';
+import { createHmac } from 'crypto';
+import {sign} from 'jsonwebtoken';
 
 const hashPwd = (salt: string, pw: string) => {
     const hmac = createHmac('sha256', salt);
@@ -13,12 +13,6 @@ const hashPwd = (salt: string, pw: string) => {
 @Route('/')
 @Tags('Auth')
 export default class UserController {
-    // @Example<IContractCreate>({
-    //     dataProvider: "A",
-    //     dataConsumer: "B",
-    //     termsAndConditions: [],
-    //     target: "https://company.com/dataset/1",
-    // })
     @Post('/register')
     public async register(@Body() user: IUserCreate): Promise<newUserResponse> {
         try {
@@ -43,11 +37,17 @@ export default class UserController {
 
             user.password = hashPwd(salt, user.password);
             const foundUser = await User.findOne({ email: user.email, password: user.password });
+            const token = sign({ _id: foundUser?._id?.toString(), email: foundUser?.email }, process.env.SECRET_KEY || "visions", {
+                expiresIn: '2 days',
+            });
+
             return {
                 data: {
                     email: foundUser?.email,
+                    token: token,
                 },
             };
+
         } catch(err){
             logger.error(err);
             throw err;

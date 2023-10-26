@@ -1,9 +1,10 @@
 import express, { Application } from "express";
 import morgan from "morgan";
-import Router from "./routes";
 import swaggerUi from "swagger-ui-express";
 import * as mongoose from 'mongoose';
 import logger from './logger';
+import contractRouter from './routes/contract';
+import userRouter from './routes/user';
 
 const PORT = process.env.PORT || 3000;
 
@@ -23,7 +24,7 @@ app.use(
     })
 );
 
-app.use(Router);
+app.use(contractRouter, userRouter);
 
 mongoose.connect(`mongodb://localhost:27017/visions`, {
 }).then(

@@ -1,5 +1,5 @@
-import { Body, Delete, Example, Get, Post, Put, Queries, Path, Route, Tags } from 'tsoa';
-import { Contract, IContract, IContractCreate, IContractUpdate } from '../models/contract';
+import { Body, Delete, Example, Get, Post, Put, Queries, Path, Route, Tags, Security } from 'tsoa';
+import { Contract, IContractCreate } from '../models/contract';
 import { ContractStatusEnum } from '../enum/contract.enum';
 import {
     deleteContractResponse,
@@ -10,9 +10,41 @@ import {
 } from '../responses/contracts.responses';
 import { getAllContractValidations } from '../validations/contracts.validations';
 import logger from '../logger';
+import { userTokenValidation } from '../validations/users.validation';
+import { User } from '../models/users';
 
+// Allow to change the options given by the user in more advanced and complex filters for mongoose
 const getAllContractFilter = (options: getAllContractValidations) => {
-    return options;
+    const filter: any = {
+    };
+
+    // retrieve all the contract created before the createdAt given
+    if(options.createdAt){
+        filter.createdAt = {
+            $lte: options.createdAt
+        }
+    }
+
+    // retrieve all the contract updated before the createdAt given
+    if(options.updatedAt){
+        filter.updatedAt = {
+            $lte: options.updatedAt
+        }
+    }
+
+    if(options.dataProvider){
+        filter.dataProvider = options.dataProvider
+    }
+
+    if(options.dataConsumer){
+        filter.dataConsumer = options.dataConsumer
+    }
+
+    if(options.status){
+        filter.status = options.status
+    }
+
+    return filter;
 }
 
 @Route("contracts")
@@ -21,7 +53,7 @@ export default class ContractController {
     @Get("/")
     public async getAllContract(@Queries() options?: getAllContractValidations): Promise<getAllContractResponse> {
         try{
-            if(options) getAllContractFilter(options);
+            if(options) options = getAllContractFilter(options);
             const contracts = await Contract.find({ ...options });
             return {
                 total: contracts.length,
@@ -57,16 +89,25 @@ export default class ContractController {
     @Post("/")
     public async newContract(@Body() contract: IContractCreate): Promise<newContractResponse> {
         try{
-            const c = {
+            // check if consumer and provider exists
+            const consumer = await User.findById(contract.dataConsumer);
+            const provider = await User.findById(contract.dataProvider);
+
+            if(!consumer || !provider){
+                return {
+                    data: null,
+                };
+            }
+
+            const contractData = {
                 status: ContractStatusEnum.PENDING,
                 createdAt: Date(),
                 dataProviderSignature: false,
                 dataConsumerSignature: false,
-            }
+                ...contract
+            };
 
-            contract = {...c, ...contract};
-
-            const newContract = await Contract.create(contract);
+            const newContract = await Contract.create(contractData);
             return {
                 data: newContract,
             };
@@ -76,22 +117,46 @@ export default class ContractController {
         }
     }
 
+    @Security("Authorization")
     @Put("/:id")
-    public async updateContract(@Path() id: string, @Body() contractUpdate: IContractUpdate): Promise<updateContractResponse> {
+    public async updateContract(
+        @Path() id: string,
+        @Body() userToken: userTokenValidation
+    ): Promise<updateContractResponse> {
         try{
+            // find the contract
             let contractToUpdate = await Contract.findById(id);
+
             if(contractToUpdate){
-                /*
-                The status of the contract change only if the consumer and the provider have signed the contract
-                 */
-                if(contractUpdate.dataConsumerSignature && contractUpdate.dataProviderSignature){
+                //find the user who made the request
+                const user = await User.findById(userToken._id)
+
+                if(!user){
+                    throw new Error("User doesn't exist")
+                }
+
+                //if is provider
+                if(contractToUpdate.dataProvider === user._id.toString()) {
+                    contractToUpdate.dataProviderSignature = true;
+                }
+
+                //if is consumer
+                if(contractToUpdate.dataConsumer === user._id.toString()) {
+                    contractToUpdate.dataConsumerSignature = true;
+                }
+
+                //if provider and consumer have signed change status of contract
+                if(contractToUpdate.dataConsumerSignature && contractToUpdate.dataProviderSignature){
                     contractToUpdate.status = ContractStatusEnum.SIGNED;
                 }
-                contractToUpdate.dataProviderSignature = contractUpdate.dataProviderSignature;
-                contractToUpdate.dataConsumerSignature = contractUpdate.dataConsumerSignature;
 
                 contractToUpdate.updatedAt = new Date();
+
                 await Contract.findByIdAndUpdate(id, contractToUpdate);
+            } else {
+                return {
+                    data: null,
+                };
             }
 
             const contract = await Contract.findById(id);
@@ -112,6 +177,10 @@ export default class ContractController {
                 contractToDelete.status = ContractStatusEnum.REVOKED;
                 contractToDelete.updatedAt = new Date();
                 await Contract.findByIdAndUpdate(id, contractToDelete);
+            } else {
+                return {
+                    data: null,
+                };
             }
 
             const contract = await Contract.findById(id);

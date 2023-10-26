@@ -2,6 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 
 
 interface IUser extends Document{
+    _id: string;
     email: string;
     password: string;
 }
@@ -13,6 +14,7 @@ interface IUserCreate{
 
 interface IUserLogin{
     email?: string;
+    token?: string;
 }
 
 const contractSchema = new Schema<IUser>({

@@ -3,6 +3,16 @@
   "noImplicitAdditionalProperties": "throw-on-extras",
   "spec": {
     "outputDirectory": "dist",
-    "specVersion": 3
+    "specVersion": 3,
+    "securityDefinitions": {
+      "Authorization": {
+        "type": "apiKey",
+        "name": "authorization",
+        "in": "header"
+      }
+    }
+  },
+  "routes": {
+    "authenticationModule": "./src/middleware/auth.ts"
   }
 }

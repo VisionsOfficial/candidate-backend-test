@@ -10,7 +10,7 @@ interface getContractByIdResponse {
 }
 
 interface newContractResponse {
-    data: IContract;
+    data: IContract | null;
 }
 
 interface updateContractResponse {
