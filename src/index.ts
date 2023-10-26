@@ -5,7 +5,9 @@ import * as mongoose from 'mongoose';
 import logger from './logger';
 import contractRouter from './routes/contract';
 import userRouter from './routes/user';
+import { SeedDb } from './seed';
 
+// windows and env issue
 const PORT = process.env.PORT || 3000;
 
 const app: Application = express();
@@ -28,7 +30,13 @@ app.use(contractRouter, userRouter);
 
 mongoose.connect(`mongodb://localhost:27017/visions`, {
 }).then(
-    r => logger.info("Connected"),
+    async r => {
+
+        // DATA SEED
+        await SeedDb();
+
+        logger.info('Connected');
+    },
     error => logger.error("Failed to connect", error)
 );
 
