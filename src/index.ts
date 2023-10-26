@@ -1,6 +1,7 @@
 import express from 'express';
 import { connect } from 'mongoose';
 import { config } from 'dotenv';
+import bodyParser from 'body-parser';
 
 import seed from './utils/seeder';
 
@@ -17,6 +18,8 @@ app.get('/ping', async (req, res, next) => {
     res.status(200).send('pong');
 });
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use('/contracts', contractsRouter);
 
 app.listen(PORT, async () => {
