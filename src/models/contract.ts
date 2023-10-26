@@ -1,17 +1,22 @@
 import { Schema, model, Document } from 'mongoose';
-import { ContractEnum } from '../enum/contract.enum';
+import { ContractStatusEnum } from '../enum/contract.enum';
 
 
 interface IContract extends Document{
     dataProvider: string;
     dataConsumer: string;
-    dataProviderSignature: string;
-    dataConsumerSignature: string;
+    dataProviderSignature?: boolean;
+    dataConsumerSignature?: boolean;
     termsAndConditions?: string[];
     target: string;
-    status: ContractEnum;
-    createdAt: Date;
-    updatedAt: Date;
+    status: ContractStatusEnum;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+interface IContractUpdate extends Document{
+    dataProviderSignature: boolean;
+    dataConsumerSignature: boolean;
 }
 
 const contractSchema = new Schema<IContract>({
@@ -24,11 +29,11 @@ const contractSchema = new Schema<IContract>({
         required: true
     },
     dataProviderSignature: {
-        type: String,
+        type: Boolean,
         required: true
     },
     dataConsumerSignature: {
-        type: String,
+        type: Boolean,
         required: true
     },
     termsAndConditions: {
@@ -40,17 +45,14 @@ const contractSchema = new Schema<IContract>({
     },
     status: {
         type: String,
-        required: true
     },
     createdAt: {
         type: Date,
-        required: true
     },
     updatedAt: {
         type: Date,
-        required: true
     },
 })
 
 const Contract = model('Contract', contractSchema);
-export  { Contract, IContract };
+export  { Contract, IContract, IContractUpdate };

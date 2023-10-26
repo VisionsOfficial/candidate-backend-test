@@ -1,77 +1,84 @@
-import { Body, Delete, Get, Post, Put, Route } from 'tsoa';
-import { Contract, IContract } from '../models/contract';
-import { ContractEnum } from '../enum/contract.enum';
+import { Body, Delete, Get, Post, Put, Queries, Query, Route, Tags } from 'tsoa';
+import { Contract, IContract, IContractUpdate } from '../models/contract';
+import { ContractStatusEnum } from '../enum/contract.enum';
+import {
+    deleteContractResponse,
+    getAllContractResponse,
+    getContractByIdResponse,
+    newContractResponse,
+    updateContractResponse,
+} from '../responses/contracts.responses';
+import { getAllContractValidations } from '../validations/contracts.validations';
 
-interface getAllContractResponse {
-    contracts: IContract[];
-}
-
-interface getContractByIdResponse {
-    contract: IContract | null;
-}
-
-interface newContractResponse {
-    contract: IContract;
-}
-
-interface updateContractResponse {
-    contract: IContract | null;
-}
-
-interface deleteContractResponse {
-    contract: IContract | null;
+const getAllContractFilter = (options: getAllContractValidations) => {
+    return options;
 }
 
 @Route("contracts")
+@Tags("Contracts")
 export default class ContractController {
     @Get("/")
-    public async getAllContract(): Promise<getAllContractResponse> {
-        const contracts = await Contract.find();
+    public async getAllContract(@Queries() options?: getAllContractValidations): Promise<getAllContractResponse> {
+        console.log("OPTIONS", options)
+        if(options) getAllContractFilter(options);
+        const contracts = await Contract.find({ ...options });
         return {
-            contracts,
+            data: contracts,
         };
     }
 
     @Get("/:id")
-    public async getContractById(id: string): Promise<getContractByIdResponse> {
+    public async getContractById(@Query() id: string): Promise<getContractByIdResponse> {
         const contract = await Contract.findById(id);
         return {
-            contract: contract,
+            data: contract,
         };
     }
 
     @Post("/")
     public async newContract(@Body() contract: IContract): Promise<newContractResponse> {
+        contract.status = ContractStatusEnum.PENDING;
+        contract.createdAt = new Date();
+        contract.dataProviderSignature = false;
+        contract.dataConsumerSignature = false;
         const newContract = await Contract.create(contract);
         return {
-            contract: newContract,
+            data: newContract,
         };
     }
 
     @Put("/:id")
-    public async updateContract(id: string): Promise<updateContractResponse> {
+    public async updateContract(@Query() id: string, @Body() contractUpdate: IContractUpdate): Promise<updateContractResponse> {
         let contractToUpdate = await Contract.findById(id);
         if(contractToUpdate){
-            contractToUpdate.status = ContractEnum.SIGNED;
-            contractToUpdate = await Contract.findByIdAndUpdate(id, contractToUpdate);
+            if(contractUpdate.dataConsumerSignature && contractUpdate.dataProviderSignature){
+                contractToUpdate.status = ContractStatusEnum.SIGNED;
+            }
+            contractToUpdate.dataProviderSignature = contractUpdate.dataProviderSignature;
+            contractToUpdate.dataConsumerSignature = contractUpdate.dataConsumerSignature;
 
+            contractToUpdate.updatedAt = new Date();
+            await Contract.findByIdAndUpdate(id, contractToUpdate);
         }
+
+        const contract = await Contract.findById(id);
         return {
-            contract: contractToUpdate,
+            data: contract,
         };
     }
 
     @Delete("/:id")
-    public async deleteContract(id: string): Promise<deleteContractResponse> {
-        let contract = await Contract.findById(id);
-        if(contract){
-            contract.status = ContractEnum.REVOKED;
-            contract = await Contract.findByIdAndUpdate(id, contract);
-
+    public async deleteContract(@Query() id: string): Promise<deleteContractResponse> {
+        let contractToDelete = await Contract.findById(id);
+        if(contractToDelete){
+            contractToDelete.status = ContractStatusEnum.REVOKED;
+            contractToDelete.updatedAt = new Date();
+            await Contract.findByIdAndUpdate(id, contractToDelete);
         }
 
+        const contract = await Contract.findById(id);
         return {
-            contract: contract,
+            data: contract,
         };
     }
 }
