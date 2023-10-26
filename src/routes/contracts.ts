@@ -1,20 +1,41 @@
 import { Router, Request, Response } from 'express';
 import { Contract, Participant } from '../schemas/schemas';
 import {
+    checkQueryFilter,
     checkMongoId,
     checkContractCreationPayload,
 } from '../middlewares/middlewares';
 
 export const contractsRouter = Router();
 
-contractsRouter.get('/', async (_req: Request, res: Response) => {
-    try {
-        const contracts = await Contract.find();
-        res.status(200).json(contracts);
-    } catch (error) {
-        res.status(400).end();
+contractsRouter.get(
+    '/',
+    checkQueryFilter,
+    async (req: Request, res: Response) => {
+        try {
+            const { participantId, status, creation } = req.query;
+            let options = {};
+            if (participantId) {
+                Object.assign(options, {
+                    $or: [
+                        { providerId: participantId },
+                        { consumerId: participantId },
+                    ],
+                });
+            }
+            if (status) {
+                Object.assign(options, { status });
+            }
+            if (creation) {
+                Object.assign(options, { creation: { $gte: creation } });
+            }
+            const contracts = await Contract.find(options);
+            res.status(200).json(contracts);
+        } catch (error) {
+            res.status(400).end();
+        }
     }
-});
+);
 
 contractsRouter.get(
     '/:id',
