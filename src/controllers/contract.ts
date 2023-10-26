@@ -81,6 +81,9 @@ export default class ContractController {
         try{
             let contractToUpdate = await Contract.findById(id);
             if(contractToUpdate){
+                /*
+                The status of the contract change only if the consumer and the provider have signed the contract
+                 */
                 if(contractUpdate.dataConsumerSignature && contractUpdate.dataProviderSignature){
                     contractToUpdate.status = ContractStatusEnum.SIGNED;
                 }

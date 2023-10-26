@@ -1,6 +1,7 @@
 import express from "express";
 import ContractController from '../controllers/contract';
 import { getAllContractValidations } from '../validations/contracts.validations';
+import UserController from '../controllers/user';
 
 const router = express.Router();
 
@@ -35,5 +36,21 @@ router.route('/contracts/:id')
         const response = await controller.deleteContract(_req.params.id);
         return res.send(response);
     });
+
+router.route('/login')
+    .post(async (_req, res) => {
+        const controller = new UserController();
+        const user = { ..._req.body }
+        const response = await controller.login(user);
+        return res.send(response);
+    })
+
+router.route('/register')
+    .post(async (_req, res) => {
+        const controller = new UserController();
+        const user = { ..._req.body }
+        const response = await controller.register(user);
+        return res.send(response);
+    })
 
 export default router;
