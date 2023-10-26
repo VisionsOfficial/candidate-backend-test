@@ -1,6 +1,7 @@
 import { IContract } from '../models/contract';
 
 interface getAllContractResponse {
+    total: number;
     data: IContract[];
 }
 

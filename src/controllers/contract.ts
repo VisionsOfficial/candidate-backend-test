@@ -1,5 +1,5 @@
-import { Body, Delete, Get, Post, Put, Queries, Query, Route, Tags } from 'tsoa';
-import { Contract, IContract, IContractUpdate } from '../models/contract';
+import { Body, Delete, Example, Get, Post, Put, Queries, Path, Route, Tags } from 'tsoa';
+import { Contract, IContract, IContractCreate, IContractUpdate } from '../models/contract';
 import { ContractStatusEnum } from '../enum/contract.enum';
 import {
     deleteContractResponse,
@@ -23,24 +23,38 @@ export default class ContractController {
         if(options) getAllContractFilter(options);
         const contracts = await Contract.find({ ...options });
         return {
+            total: contracts.length,
             data: contracts,
         };
     }
 
     @Get("/:id")
-    public async getContractById(@Query() id: string): Promise<getContractByIdResponse> {
+    public async getContractById(@Path() id: string): Promise<getContractByIdResponse> {
         const contract = await Contract.findById(id);
         return {
             data: contract,
         };
     }
 
+    @Example<IContractCreate>({
+        dataProvider: "A",
+        dataConsumer: "B",
+        termsAndConditions: [],
+        target: "https://company.com/dataset/1",
+    })
     @Post("/")
-    public async newContract(@Body() contract: IContract): Promise<newContractResponse> {
-        contract.status = ContractStatusEnum.PENDING;
-        contract.createdAt = new Date();
-        contract.dataProviderSignature = false;
-        contract.dataConsumerSignature = false;
+    public async newContract(@Body() contract: IContractCreate): Promise<newContractResponse> {
+
+        const c = {
+            status: ContractStatusEnum.PENDING,
+            createdAt: Date(),
+            dataProviderSignature: false,
+            dataConsumerSignature: false,
+        }
+
+        contract = {...c, ...contract};
+
+        console.log("CONTRACT ", contract)
         const newContract = await Contract.create(contract);
         return {
             data: newContract,
@@ -48,7 +62,7 @@ export default class ContractController {
     }
 
     @Put("/:id")
-    public async updateContract(@Query() id: string, @Body() contractUpdate: IContractUpdate): Promise<updateContractResponse> {
+    public async updateContract(@Path() id: string, @Body() contractUpdate: IContractUpdate): Promise<updateContractResponse> {
         let contractToUpdate = await Contract.findById(id);
         if(contractToUpdate){
             if(contractUpdate.dataConsumerSignature && contractUpdate.dataProviderSignature){
@@ -68,7 +82,7 @@ export default class ContractController {
     }
 
     @Delete("/:id")
-    public async deleteContract(@Query() id: string): Promise<deleteContractResponse> {
+    public async deleteContract(@Path() id: string): Promise<deleteContractResponse> {
         let contractToDelete = await Contract.findById(id);
         if(contractToDelete){
             contractToDelete.status = ContractStatusEnum.REVOKED;

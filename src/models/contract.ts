@@ -19,6 +19,13 @@ interface IContractUpdate extends Document{
     dataConsumerSignature: boolean;
 }
 
+interface IContractCreate{
+    dataProvider: string;
+    dataConsumer: string;
+    termsAndConditions?: string[];
+    target: string;
+}
+
 const contractSchema = new Schema<IContract>({
     dataProvider: {
         type: String,
@@ -55,4 +62,4 @@ const contractSchema = new Schema<IContract>({
 })
 
 const Contract = model('Contract', contractSchema);
-export  { Contract, IContract, IContractUpdate };
+export  { Contract, IContract, IContractUpdate, IContractCreate };
