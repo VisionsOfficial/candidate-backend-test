@@ -16,7 +16,7 @@ pnpm i
 
 to install packages.
 
-Don't forget to set your env variables based on the .env.sample provided
+Don't forget to set your env variables based on the .env.sample provided and modify value to match your config
 
 ```bash
 cp .env.sample .env

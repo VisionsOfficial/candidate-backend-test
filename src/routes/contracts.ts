@@ -85,30 +85,36 @@ contractsRouter.post(
     }
 );
 
-contractsRouter.put('/:contractId', async (req: Request, res: Response) => {
-    try {
-        const { contractId } = req.params;
-        const contractFound = await Contract.findById(contractId);
-        if (!contractFound) {
-            return res.status(404).json('Contract not found');
+contractsRouter.put(
+    '/:contractId',
+    // TODO: JWT check
+    async (req: Request, res: Response) => {
+        try {
+            const { contractId } = req.params;
+            const contractFound = await Contract.findById(contractId);
+            if (!contractFound) {
+                return res.status(404).json('Contract not found');
+            }
+            // TODO: Here should go a logic of checking if condition match
+            // need more knowledge about ODRL
+            const { requesterId } = req.body;
+            if (contractFound.consumerId === requesterId) {
+                contractFound.consumerSignature = true;
+            }
+            if (contractFound.providerId === requesterId) {
+                contractFound.providerSignature = true;
+            }
+            if (
+                contractFound.providerSignature &&
+                contractFound.consumerSignature
+            ) {
+                contractFound.status = 'signed';
+            }
+            await contractFound.save();
+            res.status(200).json(contractFound);
+        } catch (error) {
+            console.error(error);
+            return res.status(400).json('Bad request');
         }
-        // TODO: Here should go a logic of checking if condition match
-        // need more knowledge about ODRL
-        const { requesterId } = req.body;
-        if (contractFound.consumerId === requesterId) {
-            contractFound.consumerSignature = true;
-        }
-        if (contractFound.providerId === requesterId) {
-            contractFound.providerSignature = true;
-        }
-        if (
-            contractFound.providerSignature &&
-            contractFound.consumerSignature
-        ) {
-            contractFound.status = 'signed';
-        }
-    } catch (error) {
-        console.error(error);
-        return res.status(400).json('Bad request');
     }
-});
+);
