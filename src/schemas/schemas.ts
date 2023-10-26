@@ -1,35 +1,5 @@
 import { Schema, model } from 'mongoose';
 
-export const condition = model(
-    'condition',
-    new Schema({
-        '@context': Schema.Types.String,
-        '@type': Schema.Types.String,
-        permission: {
-            action: Schema.Types.String,
-            target: Schema.Types.String,
-            constraint: [
-                {
-                    leftOperand: Schema.Types.String,
-                    operator: Schema.Types.String,
-                    rightOperand: {
-                        '@value': Schema.Types.String,
-                        '@type': Schema.Types.String,
-                    },
-                },
-                {
-                    leftOperand: Schema.Types.String,
-                    operator: Schema.Types.String,
-                    rightOperand: {
-                        '@value': Schema.Types.String,
-                        '@type': Schema.Types.String,
-                    },
-                },
-            ],
-        },
-    })
-);
-
 export const Contract = model(
     'contract',
     new Schema({
@@ -42,7 +12,7 @@ export const Contract = model(
             type: Schema.Types.String,
             default: 'pending',
         },
-        conditions: [Schema.Types.Mixed],
+        conditions: Schema.Types.Mixed,
         creation: { type: Schema.Types.Date, default: Date.now() },
         update: { type: Schema.Types.Date, default: Date.now() },
     })

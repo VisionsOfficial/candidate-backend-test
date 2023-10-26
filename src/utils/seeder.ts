@@ -18,10 +18,4 @@ export default async function () {
         const prt = new Participant({ _id: p.id, fullname: p.fullname });
         await prt.save();
     }
-    // console.log(
-    //     (await Participant.find()).map((p) => ({
-    //         id: p._id.toString(),
-    //         fullname: p.fullname,
-    //     }))
-    // );
 }
