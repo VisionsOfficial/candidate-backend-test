@@ -108,3 +108,14 @@
 {"level":"info","message":"Connected"}
 {"level":"info","message":"Connected"}
 {"level":"info","message":"Connected"}
+{"level":"info","message":"Connected"}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"test\" (type string) at path \"_id\" for model \"User\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"test\"","value":"test","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"\"653a4f1d421a5f6dfe69c2b1\"\" (type string) at path \"_id\" for model \"Contract\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"\"653a4f1d421a5f6dfe69c2b1\"\"","value":"\"653a4f1d421a5f6dfe69c2b1\"","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"test\" (type string) at path \"_id\" for model \"User\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"test\"","value":"test","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Connected"}

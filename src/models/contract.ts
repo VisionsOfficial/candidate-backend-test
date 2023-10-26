@@ -7,7 +7,7 @@ interface IContract extends Document{
     dataConsumer: string;
     dataProviderSignature?: boolean;
     dataConsumerSignature?: boolean;
-    termsAndConditions?: string[];
+    termsAndConditions?: ODLR[];
     target: string;
     status: ContractStatusEnum;
     createdAt?: Date;
@@ -17,8 +17,29 @@ interface IContract extends Document{
 interface IContractCreate{
     dataProvider: string;
     dataConsumer: string;
-    termsAndConditions?: string[];
+    termsAndConditions?: ODLR[];
     target: string;
+}
+
+interface ODLR {
+    "@context": string;
+    "@type": string;
+    permission: {
+        action: string;
+        target: string;
+        constraint: Constraint[];
+
+    }
+}
+
+interface Constraint {
+    leftOperand: string;
+    operator: string;
+    rightOperand: {
+        "@value": Date;
+        "@type": string;
+
+    }
 }
 
 const contractSchema = new Schema<IContract>({
@@ -39,7 +60,7 @@ const contractSchema = new Schema<IContract>({
         required: true
     },
     termsAndConditions: {
-        type: [String],
+        type: [],
     },
     target: {
         type: String,
