@@ -5,7 +5,7 @@
     "main": "index.js",
     "author": "Felix Bole",
     "scripts": {
-        "dev": "pnpx nodemon",
+        "dev": "nodemon",
         "start": "node dist/app.js",
         "format": "prettier --write ./src/**/*.{ts,js}",
         "build": "rimraf ./build && tsc"
@@ -18,6 +18,7 @@
     "devDependencies": {
         "@types/express": "^4.17.20",
         "@types/node": "^20.8.8",
+        "nodemon": "^3.0.1",
         "rimraf": "^5.0.5",
         "ts-node": "^10.9.1",
         "typescript": "^5.2.2"
