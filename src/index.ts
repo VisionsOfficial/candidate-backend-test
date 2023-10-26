@@ -2,7 +2,7 @@ import express, { Application } from "express";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import * as mongoose from 'mongoose';
-import logger from './logger';
+import Logger from './logger';
 import contractRouter from './routes/contract';
 import userRouter from './routes/user';
 import { SeedDb } from './seed';
@@ -31,13 +31,12 @@ app.use(contractRouter, userRouter);
 mongoose.connect(`mongodb://localhost:27017/visions`, {
 }).then(
     async r => {
+        Logger.info('Connected');
 
         // DATA SEED
         await SeedDb();
-
-        logger.info('Connected');
     },
-    error => logger.error("Failed to connect", error)
+    error => Logger.error("Failed to connect", error)
 );
 
 

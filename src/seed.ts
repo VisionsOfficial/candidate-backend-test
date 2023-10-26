@@ -1,6 +1,6 @@
 import { Contract } from './models/contract';
 import { User } from './models/users';
-import logger from './logger';
+import Logger from './logger';
 
 export const SeedDb = async () => {
 
@@ -84,8 +84,8 @@ export const SeedDb = async () => {
             }
         );
 
-        logger.info('Database seeded successfully.');
+        Logger.info('Database seeded successfully.');
     } catch (err) {
-        logger.error(err)
+        Logger.error(err)
     }
 }

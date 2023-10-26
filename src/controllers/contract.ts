@@ -9,7 +9,7 @@ import {
     updateContractResponse,
 } from '../responses/contracts.responses';
 import { getAllContractValidations } from '../validations/contracts.validations';
-import logger from '../logger';
+import Logger from '../logger';
 import { userTokenValidation } from '../validations/users.validation';
 import { User } from '../models/users';
 
@@ -60,7 +60,7 @@ export default class ContractController {
                 data: contracts,
             };
         } catch(err){
-            logger.error(err)
+            Logger.error(err)
             throw err;
         }
     }
@@ -73,7 +73,7 @@ export default class ContractController {
                 data: contract,
             };
         } catch(err){
-            logger.error(err);
+            Logger.error(err);
             throw err;
         }
 
@@ -112,7 +112,7 @@ export default class ContractController {
                 data: newContract,
             };
         } catch(err){
-            logger.error(err);
+            Logger.error(err);
             throw err;
         }
     }
@@ -164,7 +164,7 @@ export default class ContractController {
                 data: contract,
             };
         } catch(err){
-            logger.error(err);
+            Logger.error(err);
             throw err;
         }
     }
@@ -188,7 +188,7 @@ export default class ContractController {
                 data: contract,
             };
         } catch(err){
-            logger.error(err);
+            Logger.error(err);
             throw err;
         }
     }

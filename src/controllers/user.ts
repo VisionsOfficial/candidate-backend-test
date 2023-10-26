@@ -40,7 +40,7 @@ export default class UserController {
             user.password = hashPwd(salt, user.password);
             const foundUser = await User.findOne({ email: user.email, password: user.password });
             // windows and env issue
-            const token = sign({ _id: foundUser?._id?.toString(), email: foundUser?.email }, process.env.SECRET_KEY || "visions", {
+            const token = sign({ _id: foundUser?._id?.toString(), email: foundUser?.email }, process.env.SECRET || "visions", {
                 expiresIn: '2 days',
             });
 
