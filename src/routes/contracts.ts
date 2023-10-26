@@ -62,7 +62,6 @@ contractsRouter.post(
     async (req: Request, res: Response) => {
         try {
             const { providerId, consumerId, conditions, target } = req.body;
-            console.log(providerId, consumerId, conditions, target);
             // checking if both parts exists in db
             const provider = await Participant.findById(providerId);
             const consumer = await Participant.findById(consumerId);
@@ -78,11 +77,6 @@ contractsRouter.post(
                 target,
             });
             const saved = await newContract.save();
-            // adding contract instance to both parts
-            provider.contracts.push(newContract._id);
-            consumer.contracts.push(newContract._id);
-            await provider.save();
-            await consumer.save();
             return res.status(201).json(saved);
         } catch (error) {
             console.error(error);
@@ -90,3 +84,31 @@ contractsRouter.post(
         }
     }
 );
+
+contractsRouter.put('/:contractId', async (req: Request, res: Response) => {
+    try {
+        const { contractId } = req.params;
+        const contractFound = await Contract.findById(contractId);
+        if (!contractFound) {
+            return res.status(404).json('Contract not found');
+        }
+        // TODO: Here should go a logic of checking if condition match
+        // need more knowledge about ODRL
+        const { requesterId } = req.body;
+        if (contractFound.consumerId === requesterId) {
+            contractFound.consumerSignature = true;
+        }
+        if (contractFound.providerId === requesterId) {
+            contractFound.providerSignature = true;
+        }
+        if (
+            contractFound.providerSignature &&
+            contractFound.consumerSignature
+        ) {
+            contractFound.status = 'signed';
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(400).json('Bad request');
+    }
+});

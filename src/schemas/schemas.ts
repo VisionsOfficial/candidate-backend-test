@@ -21,12 +21,6 @@ export const Contract = model(
 export const Participant = model(
     'participant',
     new Schema({
-        fullname: String,
-        contracts: [
-            {
-                ref: Contract,
-                type: Schema.Types.Mixed,
-            },
-        ],
+        name: String,
     })
 );
