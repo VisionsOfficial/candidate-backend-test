@@ -5,6 +5,7 @@ import { ContractStatusEnum } from '../../src/enum/contract.enum';
 import mongoose from 'mongoose';
 import Logger from '../../src/logger';
 import { SeedDb } from '../../src/seed';
+import { loginResponse } from '../../src/responses/user.responses';
 
 describe("Contracts routes integration testing", () => {
 
@@ -46,6 +47,18 @@ describe("Contracts routes integration testing", () => {
         expect(res.status).toBe(201);
         expect(res.body.status).toBe("success");
         expect(res.body.content.data._id.toString()).toBeDefined();
+    });
+
+    test("Sign a contract", async () => {
+        const auth: any = await request(app).post("/login").send({
+            "email": "john@doe.fr",
+            "password": "00000000"
+        })
+        const res  = await request(app).put("/contracts/653ada47b6de3307df0f560b")
+            .set('Authorization', `Bearer ${auth.body.content.data.token}`);
+        expect(res.status).toBe(200);
+        expect(res.body.status).toBe("success")
+        expect(res.body.content.data.dataProviderSignature).toBe(true)
     });
 
     test("Sign a contract error, not authenticate", async () => {
