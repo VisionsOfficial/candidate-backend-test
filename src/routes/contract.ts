@@ -10,6 +10,7 @@ import {
     updateContractResponse,
 } from '../utils/responses/contracts.responses';
 import { successResponse } from '../utils/responses/success.responses';
+import { payloadValidation } from '../middleware/payloadValidation';
 
 const contractRouter: Router = express.Router();
 
@@ -20,7 +21,7 @@ contractRouter.route('/contracts')
         const response: getAllContractResponse = await controller.getAllContract(options);
         return res.send(successResponse(response));
     })
-    .post(async (_req, res): Promise<any> => {
+    .post(payloadValidation, async (_req, res): Promise<any> => {
         const controller: ContractController = new ContractController();
         const contract = { ..._req.body }
         const response: newContractResponse = await controller.newContract(contract);
@@ -31,7 +32,7 @@ contractRouter.route('/contracts')
     })
 
 contractRouter.route('/contracts/:id')
-    .get(async (_req, res): Promise<any> => {
+    .get(payloadValidation, async (_req, res): Promise<any> => {
         const controller: ContractController = new ContractController();
         const response: getContractByIdResponse = await controller.getContractById(_req.params.id);
         if (!response.data) {
@@ -39,7 +40,7 @@ contractRouter.route('/contracts/:id')
         }
         return res.send(successResponse(response));
     })
-    .put(auth, async (_req, res): Promise<any> => {
+    .put([auth, payloadValidation], async (_req: express.Request, res: express.Response<any, Record<string, any>>): Promise<any> => {
         const controller: ContractController = new ContractController();
         const user: userTokenValidation = await getUser(_req, res) as userTokenValidation;
         const response: updateContractResponse = await controller.updateContract(_req.params.id, user);
@@ -48,7 +49,7 @@ contractRouter.route('/contracts/:id')
         }
         return res.send(successResponse(response));
     })
-    .delete(async (_req, res): Promise<any> => {
+    .delete(payloadValidation, async (_req, res): Promise<any> => {
         const controller: ContractController = new ContractController();
         const response: deleteContractResponse = await controller.deleteContract(_req.params.id);
         if (!response.data) {

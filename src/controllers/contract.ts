@@ -1,4 +1,4 @@
-import { Body, Delete, Example, Get, Post, Put, Queries, Path, Route, Tags, Security } from 'tsoa';
+import { Body, Delete, Example, Get, Post, Put, Queries, Path, Route, Tags, Security, Request } from 'tsoa';
 import { Contract } from '../models/contract';
 import { ContractStatusEnum } from '../utils/enums/contract.enum';
 import {
@@ -12,6 +12,7 @@ import { getAllContractValidations, newContractValidation } from '../utils/valid
 import Logger from '../../configs/logger';
 import { userTokenValidation } from '../utils/validations/users.validation';
 import { User } from '../models/users';
+import { ObjectId } from 'mongodb';
 
 // Allow to change the options given by the user in more advanced and complex filters for mongoose
 const getAllContractFilter = (options: getAllContractValidations) => {
@@ -80,12 +81,6 @@ export default class ContractController {
 
     }
 
-    @Example<newContractValidation>({
-        dataProvider: "A",
-        dataConsumer: "B",
-        termsAndConditions: [],
-        target: "https://company.com/dataset/1",
-    })
     @Post("/")
     public async newContract(@Body() contract: newContractValidation): Promise<newContractResponse> {
         try{
@@ -121,7 +116,7 @@ export default class ContractController {
     @Put("/:id")
     public async updateContract(
         @Path() id: string,
-        @Body() userToken: userTokenValidation
+        @Request()  userToken?: userTokenValidation
     ): Promise<updateContractResponse> {
         try{
             // find the contract
@@ -129,7 +124,7 @@ export default class ContractController {
 
             if(contractToUpdate){
                 //find the user who made the request
-                const user = await User.findById(userToken._id)
+                const user = await User.findById(userToken?._id)
 
                 if(!user){
                     throw new Error("User doesn't exist")

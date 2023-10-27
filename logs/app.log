@@ -410,3 +410,106 @@
 {"level":"info","message":"Test DB Connected "}
 {"level":"info","message":"Database seeded successfully."}
 {"level":"error"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Test DB Connected "}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Test DB Connected "}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"error"}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"string\" (type string) at path \"_id\" for model \"User\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"string\"","value":"string","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"string\" (type string) at path \"_id\" for model \"User\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"string\"","value":"string","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNhNGYxZDQyMWE1ZjZkZmU2OWMyYjEiLCJlbWFpbCI6ImpvaG5AZG9lLmZyIiwiaWF0IjoxNjk4NDA0NzE0LCJleHAiOjE2OTg1Nzc1MTR9.ewvneSyvrjJ8V6KeCW6q1vNK1ArZjp8pg2EW4h7xoOE\" (type string) at path \"_id\" for model \"Contract\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNhNGYxZDQyMWE1ZjZkZmU2OWMyYjEiLCJlbWFpbCI6ImpvaG5AZG9lLmZyIiwiaWF0IjoxNjk4NDA0NzE0LCJleHAiOjE2OTg1Nzc1MTR9.ewvneSyvrjJ8V6KeCW6q1vNK1ArZjp8pg2EW4h7xoOE\"","value":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNhNGYxZDQyMWE1ZjZkZmU2OWMyYjEiLCJlbWFpbCI6ImpvaG5AZG9lLmZyIiwiaWF0IjoxNjk4NDA0NzE0LCJleHAiOjE2OTg1Nzc1MTR9.ewvneSyvrjJ8V6KeCW6q1vNK1ArZjp8pg2EW4h7xoOE","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"1\" (type string) at path \"_id\" for model \"Contract\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"1\"","value":"1","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"1\" (type string) at path \"_id\" for model \"Contract\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"1\"","value":"1","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"1\" (type string) at path \"_id\" for model \"Contract\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"1\"","value":"1","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"1\" (type string) at path \"_id\" for model \"Contract\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"1\"","value":"1","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"1\" (type string) at path \"_id\" for model \"Contract\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"1\"","value":"1","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"1\" (type string) at path \"_id\" for model \"Contract\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"1\"","value":"1","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"string\" (type string) at path \"_id\" for model \"User\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"string\"","value":"string","valueType":"string"}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
+{"level":"info","message":"Connected"}
+{"level":"info","message":"Database seeded successfully."}
