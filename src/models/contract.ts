@@ -1,7 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import { ContractStatusEnum } from '../enum/contract.enum';
 
-
 interface IContract extends Document{
     dataProvider: string;
     dataConsumer: string;

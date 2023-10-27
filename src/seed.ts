@@ -45,6 +45,20 @@ export const SeedDb = async () => {
                 ]
             };
 
+        const seedContractTestData =
+            {
+                "_id": "653ada47b6de3307df0f45b2",
+                "createdAt": "2023-10-26T21:29:43.000Z",
+                "dataConsumer": "653ab2966484ef549fa00700",
+                "dataConsumerSignature": false,
+                "dataProvider": "653a4f1d421a5f6dfe69c2b1",
+                "dataProviderSignature": false,
+                "status": "PENDING",
+                "target": "http://company.com/dataset/1",
+                "termsAndConditions": [
+                ]
+            };
+
         const seedFirstUserData: any = {
             "_id": "653ab2966484ef549fa00700",
             "email": "felix@visionspol.eu",
@@ -60,6 +74,15 @@ export const SeedDb = async () => {
         await Contract.findOneAndUpdate(
             {_id: "653ada47b6de3307df0f560b"},
             {"$set": seedContractData},
+            {
+                upsert: true,
+                new: true,
+            }
+        );
+
+        await Contract.findOneAndUpdate(
+            {_id: "653ada47b6de3307df0f45b2"},
+            {"$set": seedContractTestData},
             {
                 upsert: true,
                 new: true,

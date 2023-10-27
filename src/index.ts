@@ -28,20 +28,24 @@ app.use(
 
 app.use(contractRouter, userRouter);
 
-mongoose.connect(`mongodb://localhost:27017/visions`, {
-}).then(
-    async r => {
-        Logger.info('Connected');
+if (process.env.NODE_ENV !== 'test') {
 
-        // DATA SEED
-        await SeedDb();
-    },
-    error => Logger.error("Failed to connect", error)
-);
+    mongoose.connect(`mongodb://localhost:27017/visions`, {
+    }).then(
+        async r => {
+            Logger.info('Connected');
+
+            // DATA SEED
+            await SeedDb();
+        },
+        error => Logger.error("Failed to connect", error)
+    );
+
+    app.listen(PORT, () => {
+        console.log("Server is running on port", PORT);
+    });
+}
 
 
-app.listen(PORT, () => {
-    console.log("Server is running on port", PORT);
-});
 
 export default app;

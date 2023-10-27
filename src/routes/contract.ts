@@ -27,7 +27,7 @@ contractRouter.route('/contracts')
         if (!response.data) {
             return res.status(404).json(errorResponse('Consumer or Provider not found'));
         }
-        return res.send(successResponse(response));
+        return res.status(201).send(successResponse(response));
     })
 
 contractRouter.route('/contracts/:id')
