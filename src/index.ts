@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import bodyParser from 'body-parser';
 
 import seed from './utils/seeder';
+import { logger } from './utils/logger';
 
 import { contractsRouter } from './routes/contracts';
 
@@ -29,8 +30,8 @@ app.listen(PORT, async () => {
         }
         await connect(DATABASE_URL);
         await seed();
-        console.log(`App running on http://localhost:${PORT}`);
+        logger.info(`App running on http://localhost:${PORT}`);
     } catch (error) {
-        console.error(error);
+        logger.error(error);
     }
 });

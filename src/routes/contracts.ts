@@ -7,6 +7,7 @@ import {
     checkQueryFilter,
     checkContractPayload,
 } from '../middlewares/';
+import { logger } from '../utils/logger';
 // import jwtCheck from '../middlewares/jwtCheck';
 
 export const contractsRouter = Router();
@@ -33,8 +34,10 @@ contractsRouter.get(
                 Object.assign(options, { creation: { $gte: creation } });
             }
             const contracts = await Contract.find(options);
+            logger.info(`${req.ip} GET /contracts ${new Date().toISOString()}`);
             res.status(200).json(contracts);
         } catch (error) {
+            logger.error(error);
             res.status(400).end();
         }
     }
@@ -53,6 +56,7 @@ contractsRouter.get(
                 res.status(400).json('Contract not found');
             }
         } catch (error) {
+            logger.error(error);
             res.status(400).json('Bad request');
         }
     }
@@ -80,9 +84,12 @@ contractsRouter.post(
                 target,
             });
             const saved = await newContract.save();
+            logger.info(
+                `${req.ip} POST /contracts ${new Date().toISOString()}`
+            );
             return res.status(201).json(saved);
         } catch (error) {
-            console.error(error);
+            logger.error(error);
             return res.status(400).json('Bad request');
         }
     }
@@ -97,11 +104,26 @@ contractsRouter.put(
             const { contractId } = req.params;
             const contractFound = await Contract.findById(contractId);
             if (!contractFound) {
+                logger.error(
+                    `${
+                        req.ip
+                    } PUT /contracts/:contractId/sign ${new Date().toISOString()}`,
+                    { contractId, event: 'Not found' }
+                );
                 return res.status(404).json('Contract not found');
             }
             const statusNotSignedOrRevoked = new RegExp(`signed|revoked`);
             // if contract status signed or revoked, not updatable anymore
             if (statusNotSignedOrRevoked.test(contractFound.status)) {
+                logger.error(
+                    `${
+                        req.ip
+                    } PUT /contracts/:contractId/sign ${new Date().toISOString()}`,
+                    {
+                        contractId,
+                        event: `Contract can't be modified. Status: ${contractFound.status}`,
+                    }
+                );
                 return res
                     .status(400)
                     .json(
@@ -116,6 +138,15 @@ contractsRouter.put(
             } else if (contractFound.providerId.toString() === requesterId) {
                 contractFound.providerSignature = true;
             } else {
+                logger.error(
+                    `${
+                        req.ip
+                    } PUT /contracts/:contractId/sign ${new Date().toISOString()}`,
+                    {
+                        contractId,
+                        event: 'Participant is not part of the contract',
+                    }
+                );
                 return res
                     .status(401)
                     .json('Participant is not part of the contract');
@@ -127,9 +158,14 @@ contractsRouter.put(
                 contractFound.status = 'signed';
             }
             await contractFound.save();
+            logger.info(
+                `${
+                    req.ip
+                } PUT /contracts/:contractId/sign ${new Date().toISOString()}`
+            );
             return res.status(200).json(contractFound);
         } catch (error) {
-            console.error(error);
+            logger.error(error);
             return res.status(400).json('Bad request');
         }
     }
@@ -143,9 +179,27 @@ contractsRouter.delete(
             const { contractId } = req.params;
             const contractFound = await Contract.findById(contractId);
             if (!contractFound) {
+                logger.error(
+                    `${
+                        req.ip
+                    } DELETE /contracts/:contractId/revoke ${new Date().toISOString()}`,
+                    {
+                        contractId,
+                        event: 'Contract not found',
+                    }
+                );
                 return res.status(404).json('Contract not found');
             }
             if (contractFound.status === 'revoked') {
+                logger.error(
+                    `${
+                        req.ip
+                    } DELETE /contracts/:contractId/revoke ${new Date().toISOString()}`,
+                    {
+                        contractId,
+                        event: 'Contract already revoked',
+                    }
+                );
                 return res.status(400).json('Contract already revoked');
             }
             const { requesterId } = req.body;
@@ -153,17 +207,31 @@ contractsRouter.delete(
                 contractFound.consumerId.toString() !== requesterId &&
                 contractFound.providerId.toString() !== requesterId
             ) {
+                logger.error(
+                    `${
+                        req.ip
+                    } DELETE /contracts/:contractId/revoke ${new Date().toISOString()}`,
+                    {
+                        contractId,
+                        event: 'Participant id not part of the contract',
+                    }
+                );
                 return res
                     .status(401)
                     .json('Participant id not part of the contract');
             }
             contractFound.status = 'revoked';
             await contractFound.save();
+            logger.info(
+                `${
+                    req.ip
+                } DELETE /contracts/:contractId/revoke ${new Date().toISOString()}`
+            );
             return res
                 .status(200)
                 .json(`contract ${contractFound._id.toString()} is revoked`);
         } catch (error) {
-            console.error(error);
+            logger.error(error);
             return res.status(400).json('Bad request');
         }
     }
