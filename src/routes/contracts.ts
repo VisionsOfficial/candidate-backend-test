@@ -1,16 +1,19 @@
 import { Router, Request, Response } from 'express';
 import { Contract, Participant } from '../schemas/schemas';
 import {
+    checkContractPostPayload,
+    checkJWT,
+    checkParamId,
     checkQueryFilter,
-    checkMongoId,
-    checkContractCreationPayload,
-} from '../middlewares/middlewares';
+    checkCrontractPUTPayload,
+} from '../middlewares/';
+// import jwtCheck from '../middlewares/jwtCheck';
 
 export const contractsRouter = Router();
 
 contractsRouter.get(
     '/',
-    checkQueryFilter,
+    checkQueryFilter.default,
     async (req: Request, res: Response) => {
         try {
             const { participantId, status, creation } = req.query;
@@ -39,7 +42,7 @@ contractsRouter.get(
 
 contractsRouter.get(
     '/:id',
-    checkMongoId,
+    checkParamId.default,
     async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
@@ -58,7 +61,7 @@ contractsRouter.get(
 contractsRouter.post(
     '/',
     // payload should be fine
-    checkContractCreationPayload,
+    checkContractPostPayload.default,
     async (req: Request, res: Response) => {
         try {
             const { providerId, consumerId, conditions, target } = req.body;
@@ -87,7 +90,8 @@ contractsRouter.post(
 
 contractsRouter.put(
     '/:contractId',
-    // TODO: JWT check
+    checkJWT.default,
+    checkCrontractPUTPayload.default,
     async (req: Request, res: Response) => {
         try {
             const { contractId } = req.params;
@@ -95,14 +99,22 @@ contractsRouter.put(
             if (!contractFound) {
                 return res.status(404).json('Contract not found');
             }
+            const statusNotSignedOrRevoked = new RegExp(`signed|revoked`);
+            // if contract status signed or revoked, not updatable anymore
+            if (statusNotSignedOrRevoked.test(contractFound.status)) {
+                return res.status(400).json("Contract can't be modified");
+            }
             // TODO: Here should go a logic of checking if condition match
             // need more knowledge about ODRL
             const { requesterId } = req.body;
-            if (contractFound.consumerId === requesterId) {
+            if (contractFound.consumerId.toString() === requesterId) {
                 contractFound.consumerSignature = true;
-            }
-            if (contractFound.providerId === requesterId) {
+            } else if (contractFound.providerId.toString() === requesterId) {
                 contractFound.providerSignature = true;
+            } else {
+                return res
+                    .status(401)
+                    .json('Participant not part of the contract');
             }
             if (
                 contractFound.providerSignature &&
@@ -111,7 +123,7 @@ contractsRouter.put(
                 contractFound.status = 'signed';
             }
             await contractFound.save();
-            res.status(200).json(contractFound);
+            return res.status(200).json(contractFound);
         } catch (error) {
             console.error(error);
             return res.status(400).json('Bad request');

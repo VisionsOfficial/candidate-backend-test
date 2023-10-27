@@ -22,5 +22,6 @@ export const Participant = model(
     'participant',
     new Schema({
         name: String,
+        token: String,
     })
 );
