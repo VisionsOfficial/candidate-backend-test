@@ -14,6 +14,7 @@ const isEmailValid = (email: string) => {
 function isPasswordValid(str: string) {
     return str.length >= 8;
 }
+//Payload validation to verify what the user has entered
 export const payloadValidation = async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.params.id && !isObjectIdValid(req.params.id)) {

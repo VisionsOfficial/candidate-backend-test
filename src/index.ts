@@ -16,6 +16,7 @@ app.use(express.json());
 app.use(morgan("tiny"));
 app.use(express.static("dist"));
 
+// Swagger docs
 app.use(
     "/docs",
     swaggerUi.serve,
@@ -26,10 +27,11 @@ app.use(
     })
 );
 
+// Router
 app.use(contractRouter, userRouter);
 
+// Avoid error with test and don't use the same DB in test and development environnement
 if (process.env.NODE_ENV !== 'test') {
-
     mongoose.connect(`mongodb://localhost:27017/visions`, {
     }).then(
         async r => {

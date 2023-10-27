@@ -25,6 +25,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+//retrieve the jwt token decrypted to know who is authenticated
 export const getUser = async (req: Request, res: Response) => {
     try {
         const token = req.header('Authorization')?.replace('Bearer ', '');

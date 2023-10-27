@@ -54,6 +54,7 @@ export default class ContractController {
     @Get("/")
     public async getAllContract(@Queries() options?: getAllContractValidations): Promise<getAllContractResponse> {
         try{
+            //filter the options
             if(options) options = getAllContractFilter(options);
             const contracts = await Contract.find({ ...options });
             return {
@@ -126,6 +127,7 @@ export default class ContractController {
                 //find the user who made the request
                 const user = await User.findById(userToken?._id)
 
+                //Error rise because if the user has a jwt token he might exist in database
                 if(!user){
                     throw new Error("User doesn't exist")
                 }
