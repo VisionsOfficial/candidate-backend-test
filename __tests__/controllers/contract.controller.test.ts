@@ -1,17 +1,17 @@
 import request from "supertest";
 // @ts-ignore
 import app from '../../src';
-import { ContractStatusEnum } from '../../src/enum/contract.enum';
+import { ContractStatusEnum } from '../../src/utils/enums/contract.enum';
 import ContractController from '../../src/controllers/contract';
 import {
     deleteContractResponse,
     getAllContractResponse,
     getContractByIdResponse,
     newContractResponse, updateContractResponse,
-} from '../../src/responses/contracts.responses';
+} from '../../src/utils/responses/contracts.responses';
 import mongoose from 'mongoose';
-import Logger from '../../src/logger';
-import { SeedDb } from '../../src/seed';
+import Logger from '../../configs/logger';
+import seedDb from '../../configs/seed';
 
 describe("Contracts Controller unit testing", () => {
 
@@ -21,7 +21,7 @@ describe("Contracts Controller unit testing", () => {
             Logger.info('Test DB Connected ');
 
             // DATA SEED
-            await SeedDb();
+            await seedDb();
         },
         error => Logger.error("Failed to connect to test DB", error)
     );

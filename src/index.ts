@@ -2,10 +2,10 @@ import express, { Application } from "express";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import * as mongoose from 'mongoose';
-import Logger from './logger';
+import Logger from '../configs/logger';
 import contractRouter from './routes/contract';
 import userRouter from './routes/user';
-import { SeedDb } from './seed';
+import seedDb from '../configs/seed';
 
 // windows and env issue
 const PORT = process.env.PORT || 3000;
@@ -36,7 +36,7 @@ if (process.env.NODE_ENV !== 'test') {
             Logger.info('Connected');
 
             // DATA SEED
-            await SeedDb();
+            await seedDb();
         },
         error => Logger.error("Failed to connect", error)
     );

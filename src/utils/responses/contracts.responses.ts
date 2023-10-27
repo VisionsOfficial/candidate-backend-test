@@ -1,24 +1,24 @@
-import { IContract } from '../models/contract';
+import { Contract } from '../../models/contract';
 
 interface getAllContractResponse {
     total: number;
-    data: IContract[];
+    data: Contract[];
 }
 
 interface getContractByIdResponse {
-    data: IContract | null;
+    data: Contract | null;
 }
 
 interface newContractResponse {
-    data: IContract | null;
+    data: Contract | null;
 }
 
 interface updateContractResponse {
-    data: IContract | null;
+    data: Contract | null;
 }
 
 interface deleteContractResponse {
-    data: IContract | null;
+    data: Contract | null;
 }
 
 export {

@@ -1,7 +1,7 @@
 import { Body, Post, Route, Tags } from 'tsoa';
-import logger from '../logger';
+import logger from '../../configs/logger';
 import { IUserCreate, User } from '../models/users';
-import { loginResponse, newUserResponse } from '../responses/user.responses';
+import { loginResponse, newUserResponse } from '../utils/responses/user.responses';
 import { createHmac } from 'crypto';
 import {sign} from 'jsonwebtoken';
 

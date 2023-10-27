@@ -1,16 +1,16 @@
 import { Body, Delete, Example, Get, Post, Put, Queries, Path, Route, Tags, Security } from 'tsoa';
-import { Contract, IContractCreate } from '../models/contract';
-import { ContractStatusEnum } from '../enum/contract.enum';
+import { Contract } from '../models/contract';
+import { ContractStatusEnum } from '../utils/enums/contract.enum';
 import {
     deleteContractResponse,
     getAllContractResponse,
     getContractByIdResponse,
     newContractResponse,
     updateContractResponse,
-} from '../responses/contracts.responses';
-import { getAllContractValidations } from '../validations/contracts.validations';
-import Logger from '../logger';
-import { userTokenValidation } from '../validations/users.validation';
+} from '../utils/responses/contracts.responses';
+import { getAllContractValidations, newContractValidation } from '../utils/validations/contracts.validations';
+import Logger from '../../configs/logger';
+import { userTokenValidation } from '../utils/validations/users.validation';
 import { User } from '../models/users';
 
 // Allow to change the options given by the user in more advanced and complex filters for mongoose
@@ -80,14 +80,14 @@ export default class ContractController {
 
     }
 
-    @Example<IContractCreate>({
+    @Example<newContractValidation>({
         dataProvider: "A",
         dataConsumer: "B",
         termsAndConditions: [],
         target: "https://company.com/dataset/1",
     })
     @Post("/")
-    public async newContract(@Body() contract: IContractCreate): Promise<newContractResponse> {
+    public async newContract(@Body() contract: newContractValidation): Promise<newContractResponse> {
         try{
             // check if consumer and provider exists
             const consumer = await User.findById(contract.dataConsumer);

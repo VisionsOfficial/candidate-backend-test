@@ -1,4 +1,4 @@
-import { IUser, IUserLogin } from '../models/users';
+import { IUser, IUserLogin } from '../../models/users';
 
 interface newUserResponse {
     data: IUser;

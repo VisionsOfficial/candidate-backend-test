@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
-import { ContractStatusEnum } from '../enum/contract.enum';
+import { ContractStatusEnum } from '../utils/enums/contract.enum';
 
-interface IContract extends Document{
+interface Contract extends Document{
     dataProvider: string;
     dataConsumer: string;
     dataProviderSignature?: boolean;
@@ -11,13 +11,6 @@ interface IContract extends Document{
     status: ContractStatusEnum;
     createdAt?: Date;
     updatedAt?: Date;
-}
-
-interface IContractCreate{
-    dataProvider: string;
-    dataConsumer: string;
-    termsAndConditions?: ODLR[];
-    target: string;
 }
 
 interface ODLR {
@@ -41,7 +34,7 @@ interface Constraint {
     }
 }
 
-const contractSchema = new Schema<IContract>({
+const contractSchema = new Schema<Contract>({
     dataProvider: {
         type: String,
         required: true
@@ -77,4 +70,4 @@ const contractSchema = new Schema<IContract>({
 })
 
 const Contract = model('Contract', contractSchema);
-export  { Contract, IContract, IContractCreate };
+export  { Contract, ODLR };

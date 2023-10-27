@@ -1,11 +1,11 @@
 import request from "supertest";
 // @ts-ignore
 import app from '../../src';
-import { ContractStatusEnum } from '../../src/enum/contract.enum';
+import { ContractStatusEnum } from '../../src/utils/enums/contract.enum';
 import mongoose from 'mongoose';
-import Logger from '../../src/logger';
-import { SeedDb } from '../../src/seed';
-import { loginResponse } from '../../src/responses/user.responses';
+import Logger from '../../configs/logger';
+import seedDb from '../../configs/seed';
+import { loginResponse } from '../../src/utils/responses/user.responses';
 
 describe("Contracts routes integration testing", () => {
 
@@ -15,7 +15,7 @@ describe("Contracts routes integration testing", () => {
             Logger.info('Test DB Connected ');
 
             // DATA SEED
-            await SeedDb();
+            await seedDb();
         },
         error => Logger.error("Failed to connect to test DB", error)
     );
@@ -44,6 +44,7 @@ describe("Contracts routes integration testing", () => {
                 termsAndConditions: [
                 ]
             });
+
         expect(res.status).toBe(201);
         expect(res.body.status).toBe("success");
         expect(res.body.content.data._id.toString()).toBeDefined();

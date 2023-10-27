@@ -1,6 +1,6 @@
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
-import { errorResponse } from '../responses/error.responses';
+import { errorResponse } from '../utils/responses/error.responses';
 
 // windows and env issue
 export const SECRET_KEY: Secret = process.env.SECRET || 'visions';

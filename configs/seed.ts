@@ -1,8 +1,8 @@
-import { Contract } from './models/contract';
-import { User } from './models/users';
+import { Contract } from '../src/models/contract';
+import { User } from '../src/models/users';
 import Logger from './logger';
 
-export const SeedDb = async () => {
+const seedDb = async () => {
 
     try {
         const seedContractData =
@@ -112,3 +112,5 @@ export const SeedDb = async () => {
         Logger.error(err)
     }
 }
+
+export default seedDb;

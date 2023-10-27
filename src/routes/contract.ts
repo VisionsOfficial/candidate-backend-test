@@ -1,15 +1,15 @@
 import express, { Router } from 'express';
 import ContractController from '../controllers/contract';
-import { getAllContractValidations } from '../validations/contracts.validations';
+import { getAllContractValidations } from '../utils/validations/contracts.validations';
 import { auth, getUser } from '../middleware/auth';
-import { userTokenValidation } from '../validations/users.validation';
-import { errorResponse } from '../responses/error.responses';
+import { userTokenValidation } from '../utils/validations/users.validation';
+import { errorResponse } from '../utils/responses/error.responses';
 import {
     deleteContractResponse, getAllContractResponse,
     getContractByIdResponse, newContractResponse,
     updateContractResponse,
-} from '../responses/contracts.responses';
-import { successResponse } from '../responses/success.responses';
+} from '../utils/responses/contracts.responses';
+import { successResponse } from '../utils/responses/success.responses';
 
 const contractRouter: Router = express.Router();
 

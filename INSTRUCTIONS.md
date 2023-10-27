@@ -71,7 +71,7 @@ __tests__
 - routes
 src
 - controllers
-- enum
+- enums
 - middleware
 - models
 - responses

@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import UserController from '../controllers/user';
-import { loginResponse, newUserResponse } from '../responses/user.responses';
-import { successResponse } from '../responses/success.responses';
+import { loginResponse, newUserResponse } from '../utils/responses/user.responses';
+import { successResponse } from '../utils/responses/success.responses';
 
 const userRouter: Router = express.Router();
 
