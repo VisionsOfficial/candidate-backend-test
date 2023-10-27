@@ -5,7 +5,7 @@ import {
     checkJWT,
     checkParamId,
     checkQueryFilter,
-    checkCrontractPUTPayload,
+    checkContractPayload,
 } from '../middlewares/';
 // import jwtCheck from '../middlewares/jwtCheck';
 
@@ -89,9 +89,9 @@ contractsRouter.post(
 );
 
 contractsRouter.put(
-    '/:contractId',
+    '/:contractId/sign',
     checkJWT.default,
-    checkCrontractPUTPayload.default,
+    checkContractPayload.checkParamContractIdAndBodyReqId,
     async (req: Request, res: Response) => {
         try {
             const { contractId } = req.params;
@@ -102,7 +102,11 @@ contractsRouter.put(
             const statusNotSignedOrRevoked = new RegExp(`signed|revoked`);
             // if contract status signed or revoked, not updatable anymore
             if (statusNotSignedOrRevoked.test(contractFound.status)) {
-                return res.status(400).json("Contract can't be modified");
+                return res
+                    .status(400)
+                    .json(
+                        `Contract can't be modified. Status: ${contractFound.status}`
+                    );
             }
             // TODO: Here should go a logic of checking if condition match
             // need more knowledge about ODRL
@@ -114,7 +118,7 @@ contractsRouter.put(
             } else {
                 return res
                     .status(401)
-                    .json('Participant not part of the contract');
+                    .json('Participant is not part of the contract');
             }
             if (
                 contractFound.providerSignature &&
@@ -124,6 +128,40 @@ contractsRouter.put(
             }
             await contractFound.save();
             return res.status(200).json(contractFound);
+        } catch (error) {
+            console.error(error);
+            return res.status(400).json('Bad request');
+        }
+    }
+);
+
+contractsRouter.delete(
+    '/:contractId/revoke',
+    checkContractPayload.checkParamContractIdAndBodyReqId,
+    async (req: Request, res: Response) => {
+        try {
+            const { contractId } = req.params;
+            const contractFound = await Contract.findById(contractId);
+            if (!contractFound) {
+                return res.status(404).json('Contract not found');
+            }
+            if (contractFound.status === 'revoked') {
+                return res.status(400).json('Contract already revoked');
+            }
+            const { requesterId } = req.body;
+            if (
+                contractFound.consumerId.toString() !== requesterId &&
+                contractFound.providerId.toString() !== requesterId
+            ) {
+                return res
+                    .status(401)
+                    .json('Participant id not part of the contract');
+            }
+            contractFound.status = 'revoked';
+            await contractFound.save();
+            return res
+                .status(200)
+                .json(`contract ${contractFound._id.toString()} is revoked`);
         } catch (error) {
             console.error(error);
             return res.status(400).json('Bad request');

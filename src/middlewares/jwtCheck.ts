@@ -10,9 +10,7 @@ export default function (req: Request, res: Response, next: NextFunction) {
         return res.status(401).json('Unauthorized');
     }
     const { token } = req.headers;
-    // TODO: Even a valid token should be checked
-    // eg: participant A could not make a call on a contract
-    // that he is not part of
+    // TODO: Check token payload too
     try {
         verify(token, SECRET);
         next();

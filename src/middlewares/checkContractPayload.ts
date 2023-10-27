@@ -2,7 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import { isValidObjectId } from 'mongoose';
 import CustomError from './customError';
 
-export default function (req: Request, res: Response, next: NextFunction) {
+export function checkParamContractIdAndBodyReqId(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
     const errors = [];
     if (!req.params.contractId || !isValidObjectId(req.params.contractId)) {
         errors.push(
