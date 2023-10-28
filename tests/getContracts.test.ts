@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { getContracts } from '../src/controllers';
+import { Types } from 'mongoose';
+import { getContracts, getContractById } from '../src/controllers';
 import {
     connectDBForTesting,
     disconnectDBForTesting,
@@ -11,6 +12,11 @@ import { Contract, Participant } from '../src/schemas/schemas';
 
 beforeAll(async () => {
     await connectDBForTesting();
+});
+
+afterEach(async () => {
+    await Participant.deleteMany();
+    await Contract.deleteMany();
 });
 
 afterAll(() => disconnectDBForTesting());
@@ -30,8 +36,6 @@ describe('getContracts', () => {
         await getContracts(req as Request, res as Response);
         expect(res.json).toHaveBeenCalledWith([contract]);
         expect(res.status).toHaveBeenCalledWith(200);
-        await Participant.deleteMany();
-        await Contract.deleteMany();
     });
     test('expect to return contracts depending on filter', async () => {
         const partA = await createParticipant('partA');
@@ -67,8 +71,6 @@ describe('getContracts', () => {
         await getContracts(req as Request, res as Response);
         expect(res.json).toHaveBeenCalledWith([contract1]);
         expect(res.status).toHaveBeenCalledWith(200);
-        await Participant.deleteMany();
-        await Contract.deleteMany();
     });
     test('expect to catch', async () => {
         // empty request to catch
@@ -76,6 +78,43 @@ describe('getContracts', () => {
         const res = mockResponse();
         await getContracts(req as Request, res as Response);
         expect(res.end).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+    });
+});
+
+describe('getContractById', () => {
+    test('Should return the requested contract', async () => {
+        const partA = await createParticipant('partA');
+        const contract = await createContract(
+            partA!._id.toString(),
+            partA!._id.toString()
+        );
+        const req: Partial<Request> = {
+            params: {
+                id: contract!._id.toString(),
+            },
+        };
+        const res = mockResponse();
+        await getContractById(req as Request, res as Response);
+        expect(res.json).toHaveBeenCalledWith(contract);
+        expect(res.status).toHaveBeenCalledWith(200);
+    });
+    test('Should not find contract', async () => {
+        const req: Partial<Request> = {
+            params: {
+                id: new Types.ObjectId().toString(),
+            },
+        };
+        const res = mockResponse();
+        await getContractById(req as Request, res as Response);
+        expect(res.json).toHaveBeenCalledWith('Contract not found');
+        expect(res.status).toHaveBeenCalledWith(404);
+    });
+    test('Should catch', async () => {
+        const req: Partial<Request> = {};
+        const res = mockResponse();
+        await getContractById(req as Request, res as Response);
+        expect(res.json).toHaveBeenCalledWith('Bad request');
         expect(res.status).toHaveBeenCalledWith(400);
     });
 });

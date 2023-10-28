@@ -36,7 +36,7 @@ export async function getContractById(req: Request, res: Response) {
         if (contractFound) {
             res.status(200).json(contractFound);
         } else {
-            res.status(400).json('Contract not found');
+            res.status(404).json('Contract not found');
         }
     } catch (error) {
         logger.error(error);
