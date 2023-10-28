@@ -4,7 +4,7 @@ import { getContracts, getContractById } from '../src/controllers';
 import {
     connectDBForTesting,
     disconnectDBForTesting,
-    createContract,
+    createTestContract,
     createParticipant,
 } from './utils/setup';
 import { mockResponse } from './utils/mock';
@@ -25,7 +25,7 @@ describe('getContracts', () => {
     test('expect to return all contracts', async () => {
         const partA = await createParticipant('partA');
         const partB = await createParticipant('partB');
-        const contract = await createContract(
+        const contract = await createTestContract(
             partA!._id.toString(),
             partB!._id.toString()
         );
@@ -41,18 +41,18 @@ describe('getContracts', () => {
         const partA = await createParticipant('partA');
         const partB = await createParticipant('partB');
         const partC = await createParticipant('partC');
-        const contract1 = await createContract(
+        const contract1 = await createTestContract(
             partA!._id.toString(),
             partB!._id.toString()
         );
-        const contract2 = await createContract(
+        const contract2 = await createTestContract(
             partA!._id.toString(),
             partB!._id.toString(),
             'signed',
             // Jan 1st 2023
             new Date(2023, 0, 1).toISOString()
         );
-        const contract3 = await createContract(
+        const contract3 = await createTestContract(
             partA!._id.toString(),
             partC!._id.toString(),
             'pending',
@@ -85,7 +85,7 @@ describe('getContracts', () => {
 describe('getContractById', () => {
     test('Should return the requested contract', async () => {
         const partA = await createParticipant('partA');
-        const contract = await createContract(
+        const contract = await createTestContract(
             partA!._id.toString(),
             partA!._id.toString()
         );

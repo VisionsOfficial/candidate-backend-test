@@ -33,7 +33,7 @@ export async function createParticipant(name: string) {
     return await Participant.findById(prt._id);
 }
 
-export async function createContract(
+export async function createTestContract(
     providerId: string,
     consumerId: string,
     status?: string,
