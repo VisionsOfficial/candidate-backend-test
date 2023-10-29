@@ -25,10 +25,10 @@ describe('getContracts', () => {
     test('expect to return all contracts', async () => {
         const partA = await createParticipant('partA');
         const partB = await createParticipant('partB');
-        const contract = await createTestContract(
-            partA!._id.toString(),
-            partB!._id.toString()
-        );
+        const contract = await createTestContract({
+            providerId: partA!._id.toString(),
+            consumerId: partB!._id.toString(),
+        });
         const req: Partial<Request> = {
             query: {},
         };
@@ -41,24 +41,24 @@ describe('getContracts', () => {
         const partA = await createParticipant('partA');
         const partB = await createParticipant('partB');
         const partC = await createParticipant('partC');
-        const contract1 = await createTestContract(
-            partA!._id.toString(),
-            partB!._id.toString()
-        );
-        const contract2 = await createTestContract(
-            partA!._id.toString(),
-            partB!._id.toString(),
-            'signed',
+        const contract1 = await createTestContract({
+            providerId: partA!._id.toString(),
+            consumerId: partB!._id.toString(),
+        });
+        const contract2 = await createTestContract({
+            providerId: partA!._id.toString(),
+            consumerId: partB!._id.toString(),
+            status: 'signed',
             // Jan 1st 2023
-            new Date(2023, 0, 1).toISOString()
-        );
-        const contract3 = await createTestContract(
-            partA!._id.toString(),
-            partC!._id.toString(),
-            'pending',
+            creation: new Date(2023, 0, 1).toISOString(),
+        });
+        const contract3 = await createTestContract({
+            providerId: partA!._id.toString(),
+            consumerId: partC!._id.toString(),
+            status: 'pending',
             // Jan 1st 2025
-            new Date(2025, 0, 1).toISOString()
-        );
+            creation: new Date(2025, 0, 1).toISOString(),
+        });
 
         const req: Partial<Request> = {
             query: {
@@ -85,10 +85,10 @@ describe('getContracts', () => {
 describe('getContractById', () => {
     test('Should return the requested contract', async () => {
         const partA = await createParticipant('partA');
-        const contract = await createTestContract(
-            partA!._id.toString(),
-            partA!._id.toString()
-        );
+        const contract = await createTestContract({
+            providerId: partA!._id.toString(),
+            consumerId: partA!._id.toString(),
+        });
         const req: Partial<Request> = {
             params: {
                 id: contract!._id.toString(),

@@ -4,11 +4,11 @@ import { Condition } from '../src/interface/interfaces';
 import {
     connectDBForTesting,
     disconnectDBForTesting,
-    createTestContract,
     createParticipant,
 } from './utils/setup';
 import { mockResponse } from './utils/mock';
 import { Contract, Participant } from '../src/schemas/schemas';
+import { Types } from 'mongoose';
 
 beforeAll(async () => {
     await connectDBForTesting();
@@ -37,5 +37,30 @@ describe('POST createContract', () => {
         const res = mockResponse();
         await createContract(req as Request, res as Response);
         expect(res.status).toHaveBeenCalledWith(201);
+    });
+    test('Should fail because one part is missing', async () => {
+        const partA = await createParticipant('partA');
+        const req: Partial<Request> = {
+            query: {},
+            body: {
+                consumerId: partA!._id.toString(),
+                providerId: new Types.ObjectId().toString(),
+                conditions: [] as Condition[],
+                target: 'test',
+            },
+        };
+        const res = mockResponse();
+        await createContract(req as Request, res as Response);
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.json).toHaveBeenCalledWith(
+            'Missing one part or more to create a contract.'
+        );
+    });
+    test('Should catch', async () => {
+        const req: Partial<Request> = {};
+        const res = mockResponse();
+        await createContract(req as Request, res as Response);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith('Bad request');
     });
 });

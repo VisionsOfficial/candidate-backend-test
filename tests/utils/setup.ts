@@ -33,23 +33,34 @@ export async function createParticipant(name: string) {
     return await Participant.findById(prt._id);
 }
 
-export async function createTestContract(
-    providerId: string,
-    consumerId: string,
-    status?: string,
-    creation?: string
-) {
+export async function createTestContract(args: {
+    providerId: string;
+    consumerId: string;
+    status?: string;
+    creation?: string;
+    providerSign?: boolean;
+    consumerSign?: boolean;
+}) {
     let options = {
         conditions: [] as Condition[],
-        consumerId,
-        providerId,
+        consumerId: args.consumerId,
+        providerId: args.providerId,
         target: 'test-target',
     };
-    if (status) {
-        Object.assign(options, { status });
+    if (args.status) {
+        Object.assign(options, { status: args.status });
     }
-    if (creation) {
-        Object.assign(options, { creation });
+    if (args.creation) {
+        Object.assign(options, { creation: args.creation });
+    }
+    if (args.providerSign) {
+        Object.assign(options, { providerSignature: args.providerSign });
+    }
+    if (args.consumerSign) {
+        Object.assign(options, { consumerSignature: args.consumerSign });
+    }
+    if (args.creation) {
+        Object.assign(options, { creation: args.creation });
     }
     const contract = await new Contract(options).save();
     return await Contract.findById(contract._id);

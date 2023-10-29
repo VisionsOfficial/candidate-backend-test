@@ -11,7 +11,7 @@ export async function createContract(req: Request, res: Response) {
         if (!provider || !consumer) {
             return res
                 .status(404)
-                .json('Missing one party or more to create a contract.');
+                .json('Missing one part or more to create a contract.');
         }
         const newContract = new Contract({
             consumerId,

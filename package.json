@@ -10,7 +10,7 @@
         "format": "prettier --write ./src/**/*.{ts,js}",
         "build": "rimraf ./build && tsc",
         "test": "jest --detectOpenHandles",
-        "test:cov": "jest --coverage"
+        "test:cov": "jest --detectOpenHandles --coverage"
     },
     "dependencies": {
         "body-parser": "^1.20.2",
