@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 import bodyParser from 'body-parser';
 
 import { serve, setup } from 'swagger-ui-express';
-import doc from '../docs/doc.json';
+import doc from './docs/swaggerDoc.json';
 
 import seed from './utils/seeder';
 import { logger } from './utils/logger';
