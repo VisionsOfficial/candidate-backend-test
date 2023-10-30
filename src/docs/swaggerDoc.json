@@ -1,0 +1,424 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Vision test API",
+        "description": "Documentation",
+        "version": "0.0.1"
+    },
+    "paths": {
+        "/contracts": {
+            "get": {
+                "summary": "Returns all contracts.",
+                "operationId": "getContracts",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["signed", "pending", "revoked"]
+                        }
+                    },
+                    {
+                        "name": "creation",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "participantId",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A JSON array of contracts",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Contract"
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "providerId": "653a5c5670634b213c412d76",
+                                        "consumerId": "653a5c5670634b213c412d78",
+                                        "providerSignature": false,
+                                        "consumerSignature": false,
+                                        "target": "some-targets",
+                                        "status": "pending",
+                                        "conditions": {
+                                            "context": "https://www.w3.org/ns/odrl.jsonld",
+                                            "type": "Offer",
+                                            "permission": {
+                                                "action": "use",
+                                                "target": "http://provider/service",
+                                                "constraint": [
+                                                    {
+                                                        "leftOperand": "dateTime",
+                                                        "operator": "lt",
+                                                        "rightOperand": {
+                                                            "value": "2023-12-31T23:59:59Z",
+                                                            "type": "xsd:dateTime"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "creation": "2023-10-30T00:57:03.058Z",
+                                        "update": "2023-10-30T00:57:03.058Z",
+                                        "_id": "653eff7dca495bbee7311196"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a contract.",
+                "operationId": "createContract",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "providerId": "653a5c5670634b213c412d76",
+                                "consumerId": "653a5c5670634b213c412d78",
+                                "providerSignature": false,
+                                "consumerSignature": false,
+                                "target": "some-targets",
+                                "status": "pending",
+                                "conditions": {
+                                    "context": "https://www.w3.org/ns/odrl.jsonld",
+                                    "type": "Offer",
+                                    "permission": {
+                                        "action": "use",
+                                        "target": "http://provider/service",
+                                        "constraint": [
+                                            {
+                                                "leftOperand": "dateTime",
+                                                "operator": "lt",
+                                                "rightOperand": {
+                                                    "value": "2023-12-31T23:59:59Z",
+                                                    "type": "xsd:dateTime"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "The created contract",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Contract"
+                                },
+                                "example": {
+                                    "providerId": "653a5c5670634b213c412d76",
+                                    "consumerId": "653a5c5670634b213c412d78",
+                                    "providerSignature": false,
+                                    "consumerSignature": false,
+                                    "target": "some-targets",
+                                    "status": "pending",
+                                    "conditions": {
+                                        "context": "https://www.w3.org/ns/odrl.jsonld",
+                                        "type": "Offer",
+                                        "permission": {
+                                            "action": "use",
+                                            "target": "http://provider/service",
+                                            "constraint": [
+                                                {
+                                                    "leftOperand": "dateTime",
+                                                    "operator": "lt",
+                                                    "rightOperand": {
+                                                        "value": "2023-12-31T23:59:59Z",
+                                                        "type": "xsd:dateTime"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "creation": "2023-10-30T00:57:03.058Z",
+                                    "update": "2023-10-30T00:57:03.058Z",
+                                    "_id": "653eff7dca495bbee7311196"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contracts/{id}": {
+            "get": {
+                "summary": "Returns the requested contract.",
+                "operationId": "createContractById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesfully return the requested contract",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Contract"
+                                },
+                                "example": {
+                                    "providerId": "653a5c5670634b213c412d76",
+                                    "consumerId": "653a5c5670634b213c412d78",
+                                    "providerSignature": false,
+                                    "consumerSignature": false,
+                                    "target": "some-targets",
+                                    "status": "pending",
+                                    "conditions": {
+                                        "context": "https://www.w3.org/ns/odrl.jsonld",
+                                        "type": "Offer",
+                                        "permission": {
+                                            "action": "use",
+                                            "target": "http://provider/service",
+                                            "constraint": [
+                                                {
+                                                    "leftOperand": "dateTime",
+                                                    "operator": "lt",
+                                                    "rightOperand": {
+                                                        "value": "2023-12-31T23:59:59Z",
+                                                        "type": "xsd:dateTime"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "creation": "2023-10-30T00:57:03.058Z",
+                                    "update": "2023-10-30T00:57:03.058Z",
+                                    "_id": "653eff7dca495bbee7311196"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contracts/{contractId}/sign": {
+            "put": {
+                "summary": "Update one contract.",
+                "operationId": "updateContract",
+                "parameters": [
+                    {
+                        "name": "contractId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "requesterId": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "requesterId": "653a5c5670634b213c412d76"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated the current contract",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Contract"
+                                },
+                                "example": {
+                                    "providerId": "653a5c5670634b213c412d76",
+                                    "consumerId": "653a5c5670634b213c412d78",
+                                    "providerSignature": false,
+                                    "consumerSignature": true,
+                                    "target": "some-targets",
+                                    "status": "pending",
+                                    "conditions": {
+                                        "context": "https://www.w3.org/ns/odrl.jsonld",
+                                        "type": "Offer",
+                                        "permission": {
+                                            "action": "use",
+                                            "target": "http://provider/service",
+                                            "constraint": [
+                                                {
+                                                    "leftOperand": "dateTime",
+                                                    "operator": "lt",
+                                                    "rightOperand": {
+                                                        "value": "2023-12-31T23:59:59Z",
+                                                        "type": "xsd:dateTime"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "creation": "2023-10-30T00:57:03.058Z",
+                                    "update": "2023-10-30T00:57:03.058Z",
+                                    "_id": "653eff7dca495bbee7311196"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contract/{contractId}/revoke": {
+            "delete": {
+                "summary": "Set status of a contract to revoked.",
+                "operationId": "revokeContract",
+                "parameters": [
+                    {
+                        "name": "contractId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "requesterId": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "requesterId": "653a5c5670634b213c412d76"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated the current contract",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Contract"
+                                },
+                                "example": {
+                                    "providerId": "653a5c5670634b213c412d76",
+                                    "consumerId": "653a5c5670634b213c412d78",
+                                    "providerSignature": false,
+                                    "consumerSignature": true,
+                                    "target": "some-targets",
+                                    "status": "revoked",
+                                    "conditions": {
+                                        "context": "https://www.w3.org/ns/odrl.jsonld",
+                                        "type": "Offer",
+                                        "permission": {
+                                            "action": "use",
+                                            "target": "http://provider/service",
+                                            "constraint": [
+                                                {
+                                                    "leftOperand": "dateTime",
+                                                    "operator": "lt",
+                                                    "rightOperand": {
+                                                        "value": "2023-12-31T23:59:59Z",
+                                                        "type": "xsd:dateTime"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "creation": "2023-10-30T00:57:03.058Z",
+                                    "update": "2023-10-30T00:57:03.058Z",
+                                    "_id": "653eff7dca495bbee7311196"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Contract": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "providerId": {
+                        "type": "string"
+                    },
+                    "consumerId": {
+                        "type": "string"
+                    },
+                    "providerSignature": {
+                        "type": "boolean"
+                    },
+                    "consumerSignature": {
+                        "type": "boolean"
+                    },
+                    "target": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "condition": {
+                        "type": "object"
+                    },
+                    "creation": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "update": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "value": "Bearer <JWT token here>"
+            }
+        }
+    }
+}

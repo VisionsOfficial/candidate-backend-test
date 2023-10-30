@@ -1,2 +1,6 @@
 node_modules
 .env
+logs
+coverage
+dist
+pnpm-lock.yaml
