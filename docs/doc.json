@@ -219,7 +219,7 @@
                 }
             }
         },
-        "/contract/{contractId}/sign": {
+        "/contracts/{contractId}/sign": {
             "put": {
                 "summary": "Update one contract.",
                 "operationId": "updateContract",
@@ -231,6 +231,11 @@
                         "schema": {
                             "type": "string"
                         }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
                     }
                 ],
                 "requestBody": {
@@ -405,6 +410,14 @@
                         "type": "string"
                     }
                 }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "value": "Bearer <JWT token here>"
             }
         }
     }

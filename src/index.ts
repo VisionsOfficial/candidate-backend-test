@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/contracts', contractsRouter);
 // swagger
-app.use('/api-docs', serve, setup(doc));
+app.use('/api-docs', serve, setup(doc, { explorer: true }));
 
 app.listen(PORT, async () => {
     try {
