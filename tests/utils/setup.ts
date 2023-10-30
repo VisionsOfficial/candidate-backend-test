@@ -1,14 +1,12 @@
 import mongoose from 'mongoose';
 import { Contract, Participant } from '../../src/schemas/schemas';
 import { Condition } from '../../src/interface/interfaces';
-import { config } from 'dotenv';
-config();
 
 const { DATABASE_URL_TEST } = process.env;
 
 export async function connectDBForTesting() {
     try {
-        const dbUri = DATABASE_URL_TEST || 'mongodb://127.0.0.1:27017/test';
+        const dbUri = 'mongodb://127.0.0.1:27017/test';
         await mongoose.connect(dbUri, {
             autoCreate: true,
         });
@@ -19,7 +17,9 @@ export async function connectDBForTesting() {
 
 export async function disconnectDBForTesting() {
     try {
-        await mongoose.connection.db.dropDatabase();
+        await mongoose.connection.db.dropDatabase({
+            dbName: 'test',
+        });
         await mongoose.connection.close();
     } catch (error) {
         console.error('DB disconnect error');

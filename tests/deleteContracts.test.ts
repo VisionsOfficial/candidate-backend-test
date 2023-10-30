@@ -19,7 +19,9 @@ afterEach(async () => {
     await Contract.deleteMany();
 });
 
-afterAll(() => disconnectDBForTesting());
+afterAll(async () => {
+    await disconnectDBForTesting();
+});
 
 describe('revokeContract', () => {
     test('Should not find contract', async () => {

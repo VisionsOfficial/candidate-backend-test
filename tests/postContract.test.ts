@@ -19,7 +19,9 @@ afterEach(async () => {
     await Contract.deleteMany();
 });
 
-afterAll(() => disconnectDBForTesting());
+afterAll(async () => {
+    await disconnectDBForTesting();
+});
 
 describe('POST createContract', () => {
     test('Should create a contract', async () => {

@@ -3,6 +3,9 @@ import { connect } from 'mongoose';
 import { config } from 'dotenv';
 import bodyParser from 'body-parser';
 
+import { serve, setup } from 'swagger-ui-express';
+import doc from './docs/doc.json';
+
 import seed from './utils/seeder';
 import { logger } from './utils/logger';
 
@@ -22,6 +25,8 @@ app.get('/ping', async (req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/contracts', contractsRouter);
+// swagger
+app.use('/api-docs', serve, setup(doc));
 
 app.listen(PORT, async () => {
     try {
