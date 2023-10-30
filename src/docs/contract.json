@@ -2,14 +2,36 @@
     "schema": {
         "type": "object",
         "properties": {
-            "id": {
-                "type": "integer",
-                "format": "int64",
-                "example": 4
+            "_id": {
+                "type": "string"
             },
-            "name": {
+            "providerId": {
+                "type": "string"
+            },
+            "consumerId": {
+                "type": "string"
+            },
+            "providerSignature": {
+                "type": "boolean"
+            },
+            "consumerSignature": {
+                "type": "boolean"
+            },
+            "target": {
+                "type": "string"
+            },
+            "status": {
+                "type": "string"
+            },
+            "condition": {
+                "type": "object"
+            },
+            "creation": {
                 "type": "string",
-                "example": "Jessica Smith"
+                "format": "date-time"
+            },
+            "update": {
+                "type": "string"
             }
         }
     }
